@@ -57,11 +57,13 @@ function solveSkeleton(pose){
   const rearElbow=twoHanded?circleIntersection(shoulderR,BONE_LENGTHS.upperArm,offGrip,BONE_LENGTHS.forearm,pose.rearBend||1):point(shoulderR,BONE_LENGTHS.upperArm,pose.ru);
   const rearHand=twoHanded?offGrip:point(rearElbow,BONE_LENGTHS.forearm,pose.rf);
   const frontKnee=point(hipF,BONE_LENGTHS.thigh,pose.ft),frontAnkle=point(frontKnee,BONE_LENGTHS.shin,pose.fs);
-  const rearKnee=point(hipR,BONE_LENGTHS.thigh,pose.rt),rearAnkle=point(rearKnee,BONE_LENGTHS.shin,pose.rs);
+  // 侧视双腿的膝盖都朝角色前方（右侧）弯；后腿只保留较小的前移量。
+  const rearKneeAngle=Math.min(pose.rt,88),rearShinAngle=Math.max(pose.rs,92);
+  const rearKnee=point(hipR,BONE_LENGTHS.thigh,rearKneeAngle),rearAnkle=point(rearKnee,BONE_LENGTHS.shin,rearShinAngle);
   const swordTip=point(mainGrip,BONE_LENGTHS.sword,pose.sword);
   return{root,shoulder,shoulderF,shoulderR,neck,headCenter,hipF,hipR,frontElbow,rearElbow,mainGrip,offGrip,rearHand,twoHanded,frontKnee,frontAnkle,rearKnee,rearAnkle,swordTip};
 }
-const base={rootX:470,rootY:408,torso:-4,head:4,gripX:115,gripY:30,fu:12,ff:-22,ru:148,rf:116,ft:70,fs:95,rt:110,rs:85,sword:-42,rearBend:1};
+const base={rootX:470,rootY:408,torso:-4,head:4,gripX:115,gripY:30,fu:12,ff:-22,ru:148,rf:116,ft:70,fs:95,rt:84,rs:96,sword:-42,rearBend:1};
 const idlePhases=[
   {t:0,name:'自动防御·双手',...base},{t:.25,name:'沉息',...base,rootY:412,torso:-3,gripX:113,gripY:33},{t:.5,name:'稳势',...base,rootY:410},{t:.75,name:'提息',...base,rootY:405,torso:-5,gripX:117,gripY:27},{t:1,name:'自动防御·双手',...base}
 ];
@@ -113,7 +115,7 @@ const line=(id,a,b)=>{const el=document.getElementById(id);el.setAttribute('x1',
 const jointDefs=[['root','腰'],['shoulder','肩'],['frontElbow','前肘'],['rearElbow','后肘'],['hipF','前髋'],['hipR','后髋'],['frontKnee','前膝'],['rearKnee','后膝'],['frontAnkle','前踝'],['rearAnkle','后踝'],['mainGrip','主握点'],['offGrip','副握点']];
 const joints=document.getElementById('joints'),labels=document.getElementById('labels');
 for(const [key,label] of jointDefs){const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.id=`joint-${key}`;c.setAttribute('r',key.includes('Grip')?9:7);c.setAttribute('class',`joint ${key.includes('rear')||key.endsWith('R')?'rear':''} ${key.includes('Grip')?'grip':''}`);joints.append(c);const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.id=`label-${key}`;t.setAttribute('class','label');t.textContent=label;labels.append(t)}
-function verify(points){const pairs=[[points.root,points.shoulder,96],[points.shoulderF,points.frontElbow,62],[points.shoulderR,points.rearElbow,62],[points.frontElbow,points.mainGrip,68],[points.rearElbow,points.rearHand,68],[points.hipF,points.frontKnee,78],[points.frontKnee,points.frontAnkle,72],[points.hipR,points.rearKnee,78],[points.rearKnee,points.rearAnkle,72],[points.mainGrip,points.swordTip,205]];const legsOrdered=points.rearKnee.x<points.frontKnee.x&&points.rearAnkle.x<points.frontAnkle.x;return legsOrdered&&pairs.every(([a,b,l])=>Math.abs(distance(a,b)-l)<.01)}
+function verify(points){const pairs=[[points.root,points.shoulder,96],[points.shoulderF,points.frontElbow,62],[points.shoulderR,points.rearElbow,62],[points.frontElbow,points.mainGrip,68],[points.rearElbow,points.rearHand,68],[points.hipF,points.frontKnee,78],[points.frontKnee,points.frontAnkle,72],[points.hipR,points.rearKnee,78],[points.rearKnee,points.rearAnkle,72],[points.mainGrip,points.swordTip,205]];const legsOrdered=points.rearKnee.x<points.frontKnee.x&&points.rearAnkle.x<points.frontAnkle.x;const kneesForward=points.frontKnee.x>points.hipF.x&&points.rearKnee.x>points.hipR.x;const rearBendSmaller=(points.rearKnee.x-points.hipR.x)<(points.frontKnee.x-points.hipF.x);return legsOrdered&&kneesForward&&rearBendSmaller&&pairs.every(([a,b,l])=>Math.abs(distance(a,b)-l)<.01)}
 function render(t){
   const pose=poseAt(t),p=solveSkeleton(pose),action=ACTIONS[currentAction],elapsed=t*action.duration;
   line('spineBone',p.root,p.shoulder);line('shoulderBone',p.shoulderR,p.shoulderF);line('rearUpperBone',p.shoulderR,p.rearElbow);line('rearForeBone',p.rearElbow,p.rearHand);line('frontUpperBone',p.shoulderF,p.frontElbow);line('frontForeBone',p.frontElbow,p.mainGrip);line('rearThighBone',p.hipR,p.rearKnee);line('rearShinBone',p.rearKnee,p.rearAnkle);line('frontThighBone',p.hipF,p.frontKnee);line('frontShinBone',p.frontKnee,p.frontAnkle);line('swordEdge',p.mainGrip,p.swordTip);line('swordBone',p.mainGrip,p.swordTip);

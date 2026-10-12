@@ -34,6 +34,8 @@ check(html.includes("{t:.615,name:'闪避后摇'")&&html.includes("name:'闪避�
 check(!html.includes('actionDodgeRecoveryHit')&&!html.includes('dodgeRecoveryHitPhases'),'duplicate dodge-specific recovery-hit action must be removed');
 check(html.includes('const rearArmVisible=!p.twoHanded'),'two-handed side view must hide the rear arm artwork');
 check(html.includes('points.rearKnee.x<points.frontKnee.x')&&html.includes('points.rearAnkle.x<points.frontAnkle.x'),'front and rear legs must not cross');
+check(html.includes('const rearKneeAngle=Math.min(pose.rt,88),rearShinAngle=Math.max(pose.rs,92)'),'rear knee must face forward with a smaller bend than the front knee');
+check(html.includes('points.frontKnee.x>points.hipF.x')&&html.includes('points.rearKnee.x>points.hipR.x'),'both knees must bend toward the front');
 check(html.includes('function chooseLowerElbow(')&&html.includes('a.y>=b.y?a:b'),'two-handed front elbow must use the lower anatomical solution');
 check(html.includes('const shoulderF=shoulder,shoulderR=shoulder;'),'front and rear arms must share one side-view shoulder pivot');
 check(html.includes('gripX:115,gripY:30'),'two-handed guard grip must extend forward with a softer arm bend');
