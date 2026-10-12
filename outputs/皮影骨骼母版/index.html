@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>皮影骨骼母版 · 5.5头身</title>
+<style>
+:root{--bg:#09121d;--panel:#111f2d;--grid:#7da1b51a;--front:#f2bf58;--rear:#56b7c7;--core:#f7efe0;--joint:#182432;--muted:#8ea7b8;--ok:#83d7a2}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 20%,#1b3042,#071019 72%);color:#eef5f7;font-family:"Microsoft YaHei",sans-serif}.shell{width:min(1180px,100%);margin:auto;padding:22px}.top{display:flex;align-items:end;justify-content:space-between;gap:20px}.eyebrow{font-size:11px;letter-spacing:.22em;color:var(--front)}h1{font:600 clamp(24px,3vw,34px) "FangSong",serif;margin:6px 0 0;letter-spacing:.08em}.metrics{display:flex;gap:10px;flex-wrap:wrap;justify-content:end}.badge{padding:7px 12px;border:1px solid #355064;border-radius:999px;color:var(--muted);font-size:12px}.badge.ok{color:var(--ok);border-color:#3d7659}.stage{margin-top:14px;aspect-ratio:16/10;border:1px solid #365267;border-radius:18px;overflow:hidden;background-color:#0d1925;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:50px 50px;box-shadow:0 18px 50px #02060a99,inset 0 0 65px #284a5a26}.stage.parry{border-color:#ffc65d;box-shadow:0 0 24px #ffc65d55,inset 0 0 60px #d88b242e}svg{width:100%;height:100%;display:block}.ground{stroke:#7891a3;stroke-width:2;opacity:.6}.bone{fill:none;stroke-linecap:round;stroke-linejoin:round}.bone.core{stroke:var(--core);stroke-width:12}.bone.front{stroke:var(--front);stroke-width:10}.bone.rear{stroke:var(--rear);stroke-width:8;opacity:.78}.bone.sword{stroke:#fff1b6;stroke-width:8}.bone.blade-edge{stroke:#997039;stroke-width:13;opacity:.8}.pelvis{fill:none;stroke:var(--core);stroke-width:8;stroke-linejoin:round}.joint{fill:var(--joint);stroke:#f3d58a;stroke-width:5}.joint.rear{stroke:var(--rear)}.joint.grip{fill:#f3bd50;stroke:#fff0ba;stroke-width:6}.head{fill:none;stroke:var(--core);stroke-width:9}.label{fill:#a9c0ce;font-size:12px;paint-order:stroke;stroke:#08131d;stroke-width:4px}.measure{fill:#738c9d;font:11px Consolas}.action-switch,.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:9px}.action-switch{margin-top:14px}.controls{margin-top:9px}button{padding:10px 18px;border:1px solid #38556b;border-radius:999px;background:#122231;color:#dce9ef;cursor:pointer}button:hover{border-color:var(--front)}button.active{background:var(--front);color:#17202a;border-color:#ffd782;font-weight:700}input{width:min(340px,100%);accent-color:var(--front)}.legend{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.card{border:1px solid #2c4558;background:#0d1a26;border-radius:12px;padding:12px 14px;color:var(--muted);font-size:12px;line-height:1.6}.card b{display:block;color:#e8f1f4;margin-bottom:3px}.swatch{display:inline-block;width:18px;height:4px;border-radius:4px;margin-right:7px;vertical-align:middle}@media(max-width:720px){.shell{padding:10px}.top{align-items:start}.metrics{display:none}.legend{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="top"><div><div class="eyebrow">RIGID SHADOW PUPPET SKELETON / 5.5 HEADS</div><h1>皮影骨骼母版</h1></div><div class="metrics"><span class="badge ok" id="lengthState">固定骨长 ✓</span><span class="badge ok" id="gripState">公共剑柄点 ✓</span><span class="badge" id="phase">自动防御</span></div></header>
+  <section class="stage" id="stage">
+    <svg viewBox="0 0 1000 625" aria-label="5.5头身皮影刚性骨骼">
+      <line class="ground" x1="70" y1="566" x2="930" y2="566"/>
+      <g id="rig">
+        <line id="rearThighBone" class="bone rear"/><line id="rearShinBone" class="bone rear"/>
+        <line id="rearUpperBone" class="bone rear"/><line id="rearForeBone" class="bone rear"/>
+        <line id="spineBone" class="bone core"/><line id="shoulderBone" class="pelvis"/><path id="pelvisBone" class="pelvis"/>
+        <line id="frontThighBone" class="bone front"/><line id="frontShinBone" class="bone front"/>
+        <line id="frontUpperBone" class="bone front"/><line id="frontForeBone" class="bone front"/>
+        <line id="swordEdge" class="bone blade-edge"/><line id="swordBone" class="bone sword"/>
+        <circle id="headShape" class="head" r="26"/>
+        <g id="joints"></g><g id="labels"></g><g id="measures"></g>
+      </g>
+    </svg>
+  </section>
+  <div class="action-switch"><button id="actionIdle" class="active">自动防御待机 · 双手</button><button id="actionSlash">破势普攻 · 单手</button><button id="actionParry">精准弹反 · 双手</button><button id="actionExecute">处决 · 双手</button><button id="actionGuardHit">自动防御受击 · 双手</button><button id="actionDodge">后撤闪避 · 双手</button><button id="actionRecoveryHit">后摇受击 · 双手</button></div>
+  <div class="controls"><button id="play">播放</button><button id="pause">暂停</button><button id="step">逐帧 +1</button><button id="replay">重新播放</button><input id="progress" type="range" min="0" max="1000" value="0" aria-label="动画进度"></div>
+  <div class="legend"><div class="card"><b><i class="swatch" style="background:var(--core)"></i>核心骨架</b>头部、脊柱、骨盆</div><div class="card"><b><i class="swatch" style="background:var(--front)"></i>前侧肢体</b>前臂和前腿</div><div class="card"><b><i class="swatch" style="background:var(--rear)"></i>后侧肢体</b>后臂和后腿</div><div class="card"><b>固定规格</b>总高330 · 上臂62 · 前臂68 · 大腿78 · 小腿72 · 剑205</div></div>
+</main>
+<script>
+const BONE_LENGTHS=Object.freeze({totalHeight:330,head:52,spine:96,pelvis:36,upperArm:62,forearm:68,thigh:78,shin:72,sword:205,gripSpacing:18});
+const PARRY_WINDOW=Object.freeze({startMs:110,endMs:170});
+const rad=d=>d*Math.PI/180;
+const point=(origin,length,angle)=>({x:origin.x+Math.cos(rad(angle))*length,y:origin.y+Math.sin(rad(angle))*length});
+const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+function circleIntersection(a,ra,b,rb,branch=1){
+  const d=distance(a,b),ux=(b.x-a.x)/d,uy=(b.y-a.y)/d;
+  const along=(ra*ra-rb*rb+d*d)/(2*d),height=Math.sqrt(Math.max(0,ra*ra-along*along));
+  return{x:a.x+along*ux-branch*height*uy,y:a.y+along*uy+branch*height*ux};
+}
+function chooseLowerElbow(shoulder,upperLength,hand,foreLength){const a=circleIntersection(shoulder,upperLength,hand,foreLength,1),b=circleIntersection(shoulder,upperLength,hand,foreLength,-1);return a.y>=b.y?a:b}
+function solveSkeleton(pose){
+  const root={x:pose.rootX,y:pose.rootY};
+  const shoulder=point(root,BONE_LENGTHS.spine,-90+pose.torso);
+  const neck=point(shoulder,24,-90+pose.head);
+  const headCenter=point(neck,26,-90+pose.head);
+  // 侧视皮影只有一个肩钉：前、后臂从同一支点出发。
+  const shoulderF=shoulder,shoulderR=shoulder;
+  const hipF={x:root.x+18,y:root.y},hipR={x:root.x-18,y:root.y+2};
+  const twoHanded=ACTIONS[currentAction].twoHanded;
+  const mainGrip=twoHanded?{x:shoulder.x+pose.gripX,y:shoulder.y+pose.gripY}:point(point(shoulderF,BONE_LENGTHS.upperArm,pose.fu),BONE_LENGTHS.forearm,pose.ff);
+  const offGrip=point(mainGrip,BONE_LENGTHS.gripSpacing,pose.sword+180);
+  const frontElbow=twoHanded?chooseLowerElbow(shoulderF,BONE_LENGTHS.upperArm,mainGrip,BONE_LENGTHS.forearm):point(shoulderF,BONE_LENGTHS.upperArm,pose.fu);
+  const rearElbow=twoHanded?circleIntersection(shoulderR,BONE_LENGTHS.upperArm,offGrip,BONE_LENGTHS.forearm,pose.rearBend||1):point(shoulderR,BONE_LENGTHS.upperArm,pose.ru);
+  const rearHand=twoHanded?offGrip:point(rearElbow,BONE_LENGTHS.forearm,pose.rf);
+  const frontKnee=point(hipF,BONE_LENGTHS.thigh,pose.ft),frontAnkle=point(frontKnee,BONE_LENGTHS.shin,pose.fs);
+  const rearKnee=point(hipR,BONE_LENGTHS.thigh,pose.rt),rearAnkle=point(rearKnee,BONE_LENGTHS.shin,pose.rs);
+  const swordTip=point(mainGrip,BONE_LENGTHS.sword,pose.sword);
+  return{root,shoulder,shoulderF,shoulderR,neck,headCenter,hipF,hipR,frontElbow,rearElbow,mainGrip,offGrip,rearHand,twoHanded,frontKnee,frontAnkle,rearKnee,rearAnkle,swordTip};
+}
+const base={rootX:470,rootY:408,torso:-4,head:4,gripX:115,gripY:30,fu:12,ff:-22,ru:148,rf:116,ft:70,fs:95,rt:110,rs:85,sword:-42,rearBend:1};
+const idlePhases=[
+  {t:0,name:'自动防御·双手',...base},{t:.25,name:'沉息',...base,rootY:412,torso:-3,gripX:113,gripY:33},{t:.5,name:'稳势',...base,rootY:410},{t:.75,name:'提息',...base,rootY:405,torso:-5,gripX:117,gripY:27},{t:1,name:'自动防御·双手',...base}
+];
+const slashPhases=[
+  {t:0,name:'破势准备·单手',...base,ru:150,rf:118},{t:.18,name:'单手蓄力',...base,rootX:458,torso:-7,fu:-42,ff:-66,ru:164,rf:135,sword:-82},{t:.34,name:'单手抬剑',...base,rootX:462,rootY:403,torso:-9,fu:-70,ff:-55,ru:170,rf:142,sword:-112},{t:.48,name:'前踏启动',...base,rootX:492,torso:6,fu:-18,ff:4,ru:145,rf:118,ft:62,fs:88,rt:118,rs:92,sword:-34},{t:.6,name:'破势命中',...base,rootX:520,rootY:412,torso:14,fu:8,ff:18,ru:158,rf:128,ft:58,fs:86,rt:122,rs:94,sword:8},{t:.76,name:'攻击后摇',...base,rootX:522,rootY:414,torso:16,fu:13,ff:22,ru:166,rf:135,ft:60,fs:87,rt:120,rs:93,sword:12},{t:1,name:'单手回势',...base,ru:150,rf:118}
+];
+const parryPhases=[
+  {t:0,name:'弹反准备·双手',...base},
+  {t:.16,name:'收剑蓄力',...base,rootX:464,rootY:412,torso:2,gripX:98,gripY:46,sword:-20,ft:68,fs:93,rt:112,rs:87},
+  {t:.31,name:'迎架截击',...base,rootX:469,rootY:405,torso:-8,gripX:111,gripY:5,sword:-62,ft:68,fs:93,rt:112,rs:87},
+  {t:.42,name:'弹开定势',...base,rootX:478,rootY:407,torso:-11,gripX:119,gripY:10,sword:-72,ft:66,fs:91,rt:114,rs:88},
+  {t:.56,name:'弹反落空后摇',...base,rootX:438,rootY:423,torso:-20,gripX:80,gripY:55,sword:-5,ft:77,fs:99,rt:103,rs:80},
+  {t:.745,name:'收剑回势',...base,rootX:453,rootY:417,torso:-13,gripX:95,gripY:45,sword:-22,ft:73,fs:96,rt:107,rs:83},
+  {t:1,name:'弹反回防·双手',...base}
+];
+const executePhases=[
+  {t:0,name:'处决准备·双手',...base},
+  {t:.18,name:'收剑蓄势',...base,rootX:458,rootY:418,torso:8,gripX:88,gripY:40,sword:-36,ft:64,fs:91,rt:116,rs:89},
+  {t:.40,name:'前刺起势',...base,rootX:475,rootY:410,torso:5,gripX:105,gripY:25,sword:-18,ft:63,fs:89,rt:117,rs:91},
+  {t:.60,name:'前刺命中',...base,rootX:510,rootY:414,torso:14,gripX:126,gripY:30,sword:-8,ft:56,fs:84,rt:124,rs:96},
+  {t:.78,name:'贯穿定势',...base,rootX:515,rootY:416,torso:16,gripX:126,gripY:32,sword:-7,ft:56,fs:84,rt:124,rs:96},
+  {t:1,name:'处决结束',...base}
+];
+const guardHitPhases=[
+  {t:0,name:'防御待机·双手',...base},
+  {t:.16,name:'举剑承击',...base,rootX:465,rootY:410,torso:-7,gripX:105,gripY:13,sword:-58,ft:69,fs:94,rt:111,rs:86},
+  {t:.30,name:'格挡受击',...base,rootX:447,rootY:416,torso:-15,gripX:96,gripY:24,sword:-48,ft:72,fs:96,rt:108,rs:83},
+  {t:.52,name:'卸力回稳',...base,rootX:458,rootY:412,torso:-8,gripX:105,gripY:25,sword:-45},
+  {t:1,name:'回到防御·双手',...base}
+];
+const dodgePhases=[
+  {t:0,name:'闪避准备·双手',...base,sword:-38},
+  {t:.16,name:'压身预备',...base,rootX:462,rootY:421,torso:7,gripX:105,gripY:42,ft:74,fs:96,rt:106,rs:82,sword:-34},
+  {t:.42,name:'后撤闪避',...base,rootX:398,rootY:416,torso:-8,gripX:104,gripY:38,ft:70,fs:94,rt:110,rs:86,sword:-30},
+  {t:.615,name:'闪避后摇',...base,rootX:390,rootY:414,torso:-5,gripX:110,gripY:32,ft:68,fs:93,rt:112,rs:87,sword:-34},
+  {t:1,name:'闪避回防·双手',...base,rootX:440,rootY:409,gripX:112,gripY:31,sword:-38}
+];
+const recoveryHitPhases=[
+  {t:0,name:'后摇空档·双手',...base,rootX:390,rootY:414,torso:-5,gripX:110,gripY:32,ft:68,fs:93,rt:112,rs:87,sword:-34},
+  {t:.20,name:'后摇受击',...base,rootX:370,rootY:423,torso:-16,head:-4,gripX:72,gripY:50,ft:76,fs:98,rt:104,rs:81,sword:-72},
+  {t:.48,name:'后摇震退',...base,rootX:352,rootY:428,torso:-20,head:-8,gripX:68,gripY:52,ft:79,fs:100,rt:101,rs:79,sword:-80},
+  {t:.76,name:'受击收势',...base,rootX:370,rootY:419,torso:-12,head:-2,gripX:82,gripY:42,ft:73,fs:96,rt:107,rs:83,sword:-65},
+  {t:1,name:'回到防御·双手',...base}
+];
+const ACTIONS=Object.freeze({idle:{duration:1400,loop:true,twoHanded:true,phases:idlePhases},slash:{duration:900,loop:false,twoHanded:false,phases:slashPhases},parry:{duration:550,loop:false,twoHanded:true,phases:parryPhases},execute:{duration:1050,loop:false,twoHanded:true,phases:executePhases},guardHit:{duration:480,loop:false,twoHanded:true,phases:guardHitPhases},dodge:{duration:520,loop:false,twoHanded:true,phases:dodgePhases},recoveryHit:{duration:600,loop:false,twoHanded:true,phases:recoveryHitPhases}});
+const mix=(a,b,t)=>a+(b-a)*t,ease=t=>t*t*(3-2*t);
+function poseAt(t){const phases=ACTIONS[currentAction].phases;if(t<=0)return phases[0];if(t>=1)return phases.at(-1);const i=phases.findIndex((p,n)=>n<phases.length-1&&t>=p.t&&t<=phases[n+1].t),a=phases[i],b=phases[i+1],u=ease((t-a.t)/(b.t-a.t)),o={name:b.name};for(const k of Object.keys(a))if(typeof a[k]==='number')o[k]=mix(a[k],b[k],u);return o}
+const line=(id,a,b)=>{const el=document.getElementById(id);el.setAttribute('x1',a.x);el.setAttribute('y1',a.y);el.setAttribute('x2',b.x);el.setAttribute('y2',b.y)};
+const jointDefs=[['root','腰'],['shoulder','肩'],['frontElbow','前肘'],['rearElbow','后肘'],['hipF','前髋'],['hipR','后髋'],['frontKnee','前膝'],['rearKnee','后膝'],['frontAnkle','前踝'],['rearAnkle','后踝'],['mainGrip','主握点'],['offGrip','副握点']];
+const joints=document.getElementById('joints'),labels=document.getElementById('labels');
+for(const [key,label] of jointDefs){const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.id=`joint-${key}`;c.setAttribute('r',key.includes('Grip')?9:7);c.setAttribute('class',`joint ${key.includes('rear')||key.endsWith('R')?'rear':''} ${key.includes('Grip')?'grip':''}`);joints.append(c);const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.id=`label-${key}`;t.setAttribute('class','label');t.textContent=label;labels.append(t)}
+function verify(points){const pairs=[[points.root,points.shoulder,96],[points.shoulderF,points.frontElbow,62],[points.shoulderR,points.rearElbow,62],[points.frontElbow,points.mainGrip,68],[points.rearElbow,points.rearHand,68],[points.hipF,points.frontKnee,78],[points.frontKnee,points.frontAnkle,72],[points.hipR,points.rearKnee,78],[points.rearKnee,points.rearAnkle,72],[points.mainGrip,points.swordTip,205]];const legsOrdered=points.rearKnee.x<points.frontKnee.x&&points.rearAnkle.x<points.frontAnkle.x;return legsOrdered&&pairs.every(([a,b,l])=>Math.abs(distance(a,b)-l)<.01)}
+function render(t){
+  const pose=poseAt(t),p=solveSkeleton(pose),action=ACTIONS[currentAction],elapsed=t*action.duration;
+  line('spineBone',p.root,p.shoulder);line('shoulderBone',p.shoulderR,p.shoulderF);line('rearUpperBone',p.shoulderR,p.rearElbow);line('rearForeBone',p.rearElbow,p.rearHand);line('frontUpperBone',p.shoulderF,p.frontElbow);line('frontForeBone',p.frontElbow,p.mainGrip);line('rearThighBone',p.hipR,p.rearKnee);line('rearShinBone',p.rearKnee,p.rearAnkle);line('frontThighBone',p.hipF,p.frontKnee);line('frontShinBone',p.frontKnee,p.frontAnkle);line('swordEdge',p.mainGrip,p.swordTip);line('swordBone',p.mainGrip,p.swordTip);
+  const rearArmVisible=!p.twoHanded;document.getElementById('rearUpperBone').style.display=rearArmVisible?'':'none';document.getElementById('rearForeBone').style.display=rearArmVisible?'':'none';
+  document.getElementById('pelvisBone').setAttribute('d',`M${p.hipR.x} ${p.hipR.y}L${p.root.x} ${p.root.y+12}L${p.hipF.x} ${p.hipF.y}`);
+  const head=document.getElementById('headShape');head.setAttribute('cx',p.headCenter.x);head.setAttribute('cy',p.headCenter.y);
+  for(const [key] of jointDefs){const c=document.getElementById(`joint-${key}`),label=document.getElementById(`label-${key}`),q=p[key],rear=key.includes('rear')||key.endsWith('R');c.setAttribute('cx',q.x);c.setAttribute('cy',q.y);label.setAttribute('x',q.x+(rear?-42:11));label.setAttribute('y',q.y+(key.includes('Knee')?18:-10));const hiddenRearArm=p.twoHanded&&(key==='shoulderR'||key==='rearElbow'||key==='offGrip');const show=!hiddenRearArm&&(key!=='offGrip'||p.twoHanded);c.style.display=show?'':'none';label.style.display=show?'':'none'}
+  const valid=verify(p),gripValid=!p.twoHanded||Math.abs(distance(p.mainGrip,p.offGrip)-BONE_LENGTHS.gripSpacing)<.01;document.getElementById('lengthState').textContent=`固定骨长 ${valid?'✓':'✗'}`;document.getElementById('gripState').textContent=`${p.twoHanded?'双手握持':'单手握持'} ${gripValid?'✓':'✗'}`;
+  const parry=currentAction==='parry'&&elapsed>=PARRY_WINDOW.startMs&&elapsed<=PARRY_WINDOW.endMs;document.getElementById('stage').classList.toggle('parry',parry);document.getElementById('phase').textContent=parry?'弹反有效':pose.name;document.getElementById('progress').value=Math.round(t*1000);
+}
+let currentAction='idle',current=0,playing=true,last=0;
+function tick(now){if(!playing)return;if(!last)last=now;const action=ACTIONS[currentAction];current+=(now-last)/action.duration;last=now;if(current>=1){if(action.loop)current%=1;else{current=1;playing=false}}render(current);if(playing)requestAnimationFrame(tick)}
+function selectAction(name){currentAction=name;current=0;last=0;for(const [id,key] of [['actionIdle','idle'],['actionSlash','slash'],['actionParry','parry'],['actionExecute','execute'],['actionGuardHit','guardHit'],['actionDodge','dodge'],['actionRecoveryHit','recoveryHit']])document.getElementById(id).classList.toggle('active',key===name);render(0);playing=true;requestAnimationFrame(tick)}
+document.getElementById('actionIdle').onclick=()=>selectAction('idle');document.getElementById('actionSlash').onclick=()=>selectAction('slash');document.getElementById('actionParry').onclick=()=>selectAction('parry');document.getElementById('actionExecute').onclick=()=>selectAction('execute');document.getElementById('actionGuardHit').onclick=()=>selectAction('guardHit');document.getElementById('actionDodge').onclick=()=>selectAction('dodge');document.getElementById('actionRecoveryHit').onclick=()=>selectAction('recoveryHit');document.getElementById('play').onclick=()=>{if(current>=1)current=0;playing=true;last=0;requestAnimationFrame(tick)};document.getElementById('pause').onclick=()=>playing=false;document.getElementById('step').onclick=()=>{playing=false;current=Math.min(1,current+1/(ACTIONS[currentAction].duration/1000*30));render(current)};document.getElementById('replay').onclick=()=>{current=0;render(0);playing=true;last=0;requestAnimationFrame(tick)};document.getElementById('progress').oninput=e=>{playing=false;current=Number(e.target.value)/1000;render(current)};
+render(0);requestAnimationFrame(tick);
+</script>
+</body></html>
