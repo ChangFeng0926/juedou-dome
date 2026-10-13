@@ -69,13 +69,19 @@ const idlePhases=[
 ];
 const normalPhases=[
   {t:0,name:'普攻准备·单手',...base,ru:150,rf:118},
-  {t:.18,name:'普攻起手',...base,rootX:475,rootY:410,torso:-3,fu:-20,ff:-42,ru:155,rf:122,sword:-68,ft:68,fs:93,rt:86,rs:96},
-  {t:.42,name:'普攻横斩',...base,rootX:496,rootY:412,torso:5,fu:2,ff:15,ru:150,rf:120,sword:-12,ft:64,fs:90,rt:84,rs:96},
-  {t:.64,name:'普攻收剑',...base,rootX:488,rootY:411,torso:1,fu:14,ff:-2,ru:154,rf:123,sword:-36,ft:68,fs:93,rt:85,rs:96},
+  {t:.18,name:'普攻大幅起手',...base,rootX:462,rootY:408,torso:-8,fu:-44,ff:-66,ru:160,rf:126,sword:-94,ft:69,fs:94,rt:86,rs:96},
+  {t:.42,name:'普攻大幅横斩',...base,rootX:512,rootY:413,torso:10,fu:16,ff:30,ru:148,rf:118,sword:6,ft:60,fs:87,rt:84,rs:96},
+  {t:.64,name:'普攻收剑',...base,rootX:496,rootY:412,torso:3,fu:20,ff:2,ru:154,rf:123,sword:-40,ft:66,fs:92,rt:85,rs:96},
   {t:1,name:'普攻回势·单手',...base,ru:150,rf:118}
 ];
 const breakPhases=[
-  {t:0,name:'破势准备·单手',...base,ru:150,rf:118},{t:.18,name:'单手蓄力',...base,rootX:458,torso:-7,fu:-42,ff:-66,ru:164,rf:135,sword:-82},{t:.34,name:'单手抬剑',...base,rootX:462,rootY:403,torso:-9,fu:-70,ff:-55,ru:170,rf:142,sword:-112},{t:.48,name:'前踏启动',...base,rootX:492,torso:6,fu:-18,ff:4,ru:145,rf:118,ft:62,fs:88,rt:118,rs:92,sword:-34},{t:.6,name:'破势命中',...base,rootX:520,rootY:412,torso:14,fu:8,ff:18,ru:158,rf:128,ft:58,fs:86,rt:122,rs:94,sword:8},{t:.76,name:'攻击后摇',...base,rootX:522,rootY:414,torso:16,fu:13,ff:22,ru:166,rf:135,ft:60,fs:87,rt:120,rs:93,sword:12},{t:1,name:'单手回势',...base,ru:150,rf:118}
+  {t:0,name:'破势准备·单手',...base,ru:150,rf:118},
+  {t:.18,name:'破势收剑',...base,rootX:456,rootY:414,torso:-6,fu:-30,ff:-54,ru:164,rf:134,sword:-78,ft:68,fs:93,rt:86,rs:96},
+  {t:.38,name:'破势瞄准',...base,rootX:474,rootY:409,torso:2,fu:-8,ff:-16,ru:154,rf:122,sword:-28,ft:64,fs:90,rt:85,rs:96},
+  {t:.52,name:'破势前刺',...base,rootX:526,rootY:414,torso:15,fu:8,ff:22,ru:150,rf:120,sword:-4,ft:56,fs:84,rt:84,rs:96},
+  {t:.66,name:'破势命中',...base,rootX:530,rootY:416,torso:16,fu:10,ff:24,ru:152,rf:121,sword:-3,ft:56,fs:84,rt:84,rs:96},
+  {t:.82,name:'破势抽剑',...base,rootX:500,rootY:412,torso:4,fu:2,ff:5,ru:156,rf:124,sword:-24,ft:64,fs:90,rt:85,rs:96},
+  {t:1,name:'破势回势·单手',...base,ru:150,rf:118}
 ];
 const parryPhases=[
   {t:0,name:'弹反准备·双手',...base},
@@ -88,11 +94,11 @@ const parryPhases=[
 ];
 const executePhases=[
   {t:0,name:'处决准备·双手',...base},
-  {t:.16,name:'收剑蓄势',...base,rootX:450,rootY:422,torso:10,gripX:78,gripY:46,sword:-42,ft:70,fs:94,rt:112,rs:87},
-  {t:.34,name:'前刺起势',...base,rootX:476,rootY:411,torso:4,gripX:104,gripY:27,sword:-18,ft:64,fs:90,rt:116,rs:89},
-  {t:.46,name:'前刺命中',...base,rootX:530,rootY:418,torso:20,gripX:124,gripY:30,sword:-5,ft:54,fs:82,rt:126,rs:98},
-  {t:.53,name:'贯穿停顿',...base,rootX:534,rootY:420,torso:21,gripX:124,gripY:32,sword:-4,ft:54,fs:82,rt:126,rs:98},
-  {t:.76,name:'抽剑收势',...base,rootX:500,rootY:414,torso:5,gripX:106,gripY:32,sword:-30,ft:64,fs:91,rt:116,rs:89},
+  {t:.22,name:'沉剑蓄势',...base,rootX:452,rootY:426,torso:10,gripX:82,gripY:72,sword:35,ft:72,fs:96,rt:108,rs:83},
+  {t:.38,name:'挑剑起势',...base,rootX:470,rootY:416,torso:4,gripX:92,gripY:50,sword:4,ft:67,fs:92,rt:113,rs:88},
+  {t:.50,name:'向上挑斩',...base,rootX:510,rootY:404,torso:-8,gripX:110,gripY:-2,sword:-72,ft:58,fs:86,rt:122,rs:94},
+  {t:.58,name:'挑斩停顿',...base,rootX:514,rootY:406,torso:-9,gripX:112,gripY:-4,sword:-74,ft:58,fs:86,rt:122,rs:94},
+  {t:.78,name:'收剑回势',...base,rootX:490,rootY:411,torso:-1,gripX:108,gripY:22,sword:-42,ft:66,fs:92,rt:114,rs:88},
   {t:1,name:'处决结束',...base}
 ];
 const guardHitPhases=[
