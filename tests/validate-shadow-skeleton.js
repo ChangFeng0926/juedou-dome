@@ -4,7 +4,7 @@ if(!fs.existsSync(file))throw new Error('skeleton page missing');
 const html=fs.readFileSync(file,'utf8');
 const check=(value,message)=>{if(!value)throw new Error(message)};
 
-for(const token of ['const BONE_LENGTHS','function solveSkeleton','totalHeight:330','upperArm:62','forearm:68','thigh:78','shin:72','gripSpacing:18','mainGrip','offGrip','twoHanded','idlePhases','slashPhases','parryPhases','executePhases']){
+for(const token of ['const BONE_LENGTHS','function solveSkeleton','totalHeight:330','upperArm:62','forearm:68','thigh:78','shin:72','gripSpacing:18','mainGrip','offGrip','twoHanded','idlePhases','normalPhases','breakPhases','parryPhases','executePhases']){
   check(html.includes(token),`missing ${token}`);
 }
 
@@ -13,14 +13,15 @@ for(const id of ['shoulderBone','spineBone','rearUpperBone','rearForeBone','fron
 }
 
 for(const label of ['肩','肘','髋','膝','踝','剑柄'])check(html.includes(label),`missing joint label ${label}`);
-for(const control of ['actionIdle','actionSlash','actionParry','actionExecute','actionGuardHit','actionDodge','actionRecoveryHit','play','pause','step','replay'])check(html.includes(`id="${control}"`),`missing control ${control}`);
+for(const control of ['actionIdle','actionSlash','actionBreak','actionParry','actionExecute','actionGuardHit','actionDodge','actionRecoveryHit','play','pause','step','replay'])check(html.includes(`id="${control}"`),`missing control ${control}`);
 check(html.includes('startMs:110,endMs:170'),'missing 110–170ms parry window');
 check(html.includes("{t:.745,name:'收剑回势'"),'a missed parry must settle back to guard after its recovery');
 check(html.includes("name:'迎架截击'")&&html.includes("name:'弹开定势'"),'parry must have a distinct intercept and deflection pose');
 check(html.includes("name:'弹反落空后摇'")&&html.includes("name:'收剑回势'"),'a missed parry must visibly recoil before returning to guard');
 check(html.includes("name:'前刺起势'")&&html.includes("name:'前刺命中'")&&html.includes("name:'贯穿定势'"),'execution must use a distinct forward-thrust sequence');
 check(html.includes("idle:{duration:1400,loop:true,twoHanded:true"),'idle must use two hands');
-check(html.includes("slash:{duration:900,loop:false,twoHanded:false"),'break attack must use one hand');
+check(html.includes("slash:{duration:620,loop:false,twoHanded:false"),'normal attack must use one hand');
+check(html.includes("breakAttack:{duration:900,loop:false,twoHanded:false")&&html.includes("name:'普攻横斩'")&&html.includes("name:'破势命中'"),'normal and break attacks must use separate one-handed action sets');
 check(html.includes("parry:{duration:550,loop:false,twoHanded:true"),'parry must use two hands');
 check(html.includes("execute:{duration:1050,loop:false,twoHanded:true"),'execution must use two hands');
 check(html.includes("guardHit:{duration:480,loop:false,twoHanded:true")&&html.includes("dodge:{duration:520,loop:false,twoHanded:true"),'must provide guarded hit and two-handed dodge reactions');

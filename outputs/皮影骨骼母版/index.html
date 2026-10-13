@@ -26,7 +26,7 @@
       </g>
     </svg>
   </section>
-  <div class="action-switch"><button id="actionIdle" class="active">自动防御待机 · 双手</button><button id="actionSlash">破势普攻 · 单手</button><button id="actionParry">精准弹反 · 双手</button><button id="actionExecute">处决 · 双手</button><button id="actionGuardHit">自动防御受击 · 双手</button><button id="actionDodge">后撤闪避 · 双手</button><button id="actionRecoveryHit">后摇受击 · 双手</button></div>
+  <div class="action-switch"><button id="actionIdle" class="active">自动防御待机 · 双手</button><button id="actionSlash">普通攻击 · 单手</button><button id="actionBreak">破势攻击 · 单手</button><button id="actionParry">精准弹反 · 双手</button><button id="actionExecute">处决 · 双手</button><button id="actionGuardHit">自动防御受击 · 双手</button><button id="actionDodge">后撤闪避 · 双手</button><button id="actionRecoveryHit">后摇受击 · 双手</button></div>
   <div class="controls"><button id="play">播放</button><button id="pause">暂停</button><button id="step">逐帧 +1</button><button id="replay">重新播放</button><input id="progress" type="range" min="0" max="1000" value="0" aria-label="动画进度"></div>
   <div class="legend"><div class="card"><b><i class="swatch" style="background:var(--core)"></i>核心骨架</b>头部、脊柱、骨盆</div><div class="card"><b><i class="swatch" style="background:var(--front)"></i>前侧肢体</b>前臂和前腿</div><div class="card"><b><i class="swatch" style="background:var(--rear)"></i>后侧肢体</b>后臂和后腿</div><div class="card"><b>固定规格</b>总高330 · 上臂62 · 前臂68 · 大腿78 · 小腿72 · 剑205</div></div>
 </main>
@@ -67,7 +67,14 @@ const base={rootX:470,rootY:408,torso:-4,head:4,gripX:115,gripY:30,fu:12,ff:-22,
 const idlePhases=[
   {t:0,name:'自动防御·双手',...base},{t:.25,name:'沉息',...base,rootY:412,torso:-3,gripX:113,gripY:33},{t:.5,name:'稳势',...base,rootY:410},{t:.75,name:'提息',...base,rootY:405,torso:-5,gripX:117,gripY:27},{t:1,name:'自动防御·双手',...base}
 ];
-const slashPhases=[
+const normalPhases=[
+  {t:0,name:'普攻准备·单手',...base,ru:150,rf:118},
+  {t:.18,name:'普攻起手',...base,rootX:475,rootY:410,torso:-3,fu:-20,ff:-42,ru:155,rf:122,sword:-68,ft:68,fs:93,rt:86,rs:96},
+  {t:.42,name:'普攻横斩',...base,rootX:496,rootY:412,torso:5,fu:2,ff:15,ru:150,rf:120,sword:-12,ft:64,fs:90,rt:84,rs:96},
+  {t:.64,name:'普攻收剑',...base,rootX:488,rootY:411,torso:1,fu:14,ff:-2,ru:154,rf:123,sword:-36,ft:68,fs:93,rt:85,rs:96},
+  {t:1,name:'普攻回势·单手',...base,ru:150,rf:118}
+];
+const breakPhases=[
   {t:0,name:'破势准备·单手',...base,ru:150,rf:118},{t:.18,name:'单手蓄力',...base,rootX:458,torso:-7,fu:-42,ff:-66,ru:164,rf:135,sword:-82},{t:.34,name:'单手抬剑',...base,rootX:462,rootY:403,torso:-9,fu:-70,ff:-55,ru:170,rf:142,sword:-112},{t:.48,name:'前踏启动',...base,rootX:492,torso:6,fu:-18,ff:4,ru:145,rf:118,ft:62,fs:88,rt:118,rs:92,sword:-34},{t:.6,name:'破势命中',...base,rootX:520,rootY:412,torso:14,fu:8,ff:18,ru:158,rf:128,ft:58,fs:86,rt:122,rs:94,sword:8},{t:.76,name:'攻击后摇',...base,rootX:522,rootY:414,torso:16,fu:13,ff:22,ru:166,rf:135,ft:60,fs:87,rt:120,rs:93,sword:12},{t:1,name:'单手回势',...base,ru:150,rf:118}
 ];
 const parryPhases=[
@@ -108,7 +115,7 @@ const recoveryHitPhases=[
   {t:.76,name:'受击收势',...base,rootX:370,rootY:419,torso:-12,head:-2,gripX:82,gripY:42,ft:73,fs:96,rt:107,rs:83,sword:-65},
   {t:1,name:'回到防御·双手',...base}
 ];
-const ACTIONS=Object.freeze({idle:{duration:1400,loop:true,twoHanded:true,phases:idlePhases},slash:{duration:900,loop:false,twoHanded:false,phases:slashPhases},parry:{duration:550,loop:false,twoHanded:true,phases:parryPhases},execute:{duration:1050,loop:false,twoHanded:true,phases:executePhases},guardHit:{duration:480,loop:false,twoHanded:true,phases:guardHitPhases},dodge:{duration:520,loop:false,twoHanded:true,phases:dodgePhases},recoveryHit:{duration:600,loop:false,twoHanded:true,phases:recoveryHitPhases}});
+const ACTIONS=Object.freeze({idle:{duration:1400,loop:true,twoHanded:true,phases:idlePhases},slash:{duration:620,loop:false,twoHanded:false,phases:normalPhases},breakAttack:{duration:900,loop:false,twoHanded:false,phases:breakPhases},parry:{duration:550,loop:false,twoHanded:true,phases:parryPhases},execute:{duration:1050,loop:false,twoHanded:true,phases:executePhases},guardHit:{duration:480,loop:false,twoHanded:true,phases:guardHitPhases},dodge:{duration:520,loop:false,twoHanded:true,phases:dodgePhases},recoveryHit:{duration:600,loop:false,twoHanded:true,phases:recoveryHitPhases}});
 const mix=(a,b,t)=>a+(b-a)*t,ease=t=>t*t*(3-2*t);
 function poseAt(t){const phases=ACTIONS[currentAction].phases;if(t<=0)return phases[0];if(t>=1)return phases.at(-1);const i=phases.findIndex((p,n)=>n<phases.length-1&&t>=p.t&&t<=phases[n+1].t),a=phases[i],b=phases[i+1],u=ease((t-a.t)/(b.t-a.t)),o={name:b.name};for(const k of Object.keys(a))if(typeof a[k]==='number')o[k]=mix(a[k],b[k],u);return o}
 const line=(id,a,b)=>{const el=document.getElementById(id);el.setAttribute('x1',a.x);el.setAttribute('y1',a.y);el.setAttribute('x2',b.x);el.setAttribute('y2',b.y)};
@@ -128,8 +135,8 @@ function render(t){
 }
 let currentAction='idle',current=0,playing=true,last=0;
 function tick(now){if(!playing)return;if(!last)last=now;const action=ACTIONS[currentAction];current+=(now-last)/action.duration;last=now;if(current>=1){if(action.loop)current%=1;else{current=1;playing=false}}render(current);if(playing)requestAnimationFrame(tick)}
-function selectAction(name){currentAction=name;current=0;last=0;for(const [id,key] of [['actionIdle','idle'],['actionSlash','slash'],['actionParry','parry'],['actionExecute','execute'],['actionGuardHit','guardHit'],['actionDodge','dodge'],['actionRecoveryHit','recoveryHit']])document.getElementById(id).classList.toggle('active',key===name);render(0);playing=true;requestAnimationFrame(tick)}
-document.getElementById('actionIdle').onclick=()=>selectAction('idle');document.getElementById('actionSlash').onclick=()=>selectAction('slash');document.getElementById('actionParry').onclick=()=>selectAction('parry');document.getElementById('actionExecute').onclick=()=>selectAction('execute');document.getElementById('actionGuardHit').onclick=()=>selectAction('guardHit');document.getElementById('actionDodge').onclick=()=>selectAction('dodge');document.getElementById('actionRecoveryHit').onclick=()=>selectAction('recoveryHit');document.getElementById('play').onclick=()=>{if(current>=1)current=0;playing=true;last=0;requestAnimationFrame(tick)};document.getElementById('pause').onclick=()=>playing=false;document.getElementById('step').onclick=()=>{playing=false;current=Math.min(1,current+1/(ACTIONS[currentAction].duration/1000*30));render(current)};document.getElementById('replay').onclick=()=>{current=0;render(0);playing=true;last=0;requestAnimationFrame(tick)};document.getElementById('progress').oninput=e=>{playing=false;current=Number(e.target.value)/1000;render(current)};
+function selectAction(name){currentAction=name;current=0;last=0;for(const [id,key] of [['actionIdle','idle'],['actionSlash','slash'],['actionBreak','breakAttack'],['actionParry','parry'],['actionExecute','execute'],['actionGuardHit','guardHit'],['actionDodge','dodge'],['actionRecoveryHit','recoveryHit']])document.getElementById(id).classList.toggle('active',key===name);render(0);playing=true;requestAnimationFrame(tick)}
+document.getElementById('actionIdle').onclick=()=>selectAction('idle');document.getElementById('actionSlash').onclick=()=>selectAction('slash');document.getElementById('actionBreak').onclick=()=>selectAction('breakAttack');document.getElementById('actionParry').onclick=()=>selectAction('parry');document.getElementById('actionExecute').onclick=()=>selectAction('execute');document.getElementById('actionGuardHit').onclick=()=>selectAction('guardHit');document.getElementById('actionDodge').onclick=()=>selectAction('dodge');document.getElementById('actionRecoveryHit').onclick=()=>selectAction('recoveryHit');document.getElementById('play').onclick=()=>{if(current>=1)current=0;playing=true;last=0;requestAnimationFrame(tick)};document.getElementById('pause').onclick=()=>playing=false;document.getElementById('step').onclick=()=>{playing=false;current=Math.min(1,current+1/(ACTIONS[currentAction].duration/1000*30));render(current)};document.getElementById('replay').onclick=()=>{current=0;render(0);playing=true;last=0;requestAnimationFrame(tick)};document.getElementById('progress').oninput=e=>{playing=false;current=Number(e.target.value)/1000;render(current)};
 render(0);requestAnimationFrame(tick);
 </script>
 </body></html>
