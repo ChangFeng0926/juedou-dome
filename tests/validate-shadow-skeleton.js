@@ -23,7 +23,8 @@ check(html.includes("idle:{duration:1400,loop:true,twoHanded:true"),'idle must u
 check(html.includes("slash:{duration:620,loop:false,twoHanded:false"),'normal attack must use one hand');
 check(html.includes("breakAttack:{duration:900,loop:false,twoHanded:false")&&html.includes("name:'普攻横斩'")&&html.includes("name:'破势命中'"),'normal and break attacks must use separate one-handed action sets');
 check(html.includes("parry:{duration:550,loop:false,twoHanded:true"),'parry must use two hands');
-check(html.includes("execute:{duration:1050,loop:false,twoHanded:true"),'execution must use two hands');
+check(html.includes("execute:{duration:720,loop:false,twoHanded:true"),'execution must use two hands with a decisive duration');
+check(html.includes("{t:.36,name:'前刺起势'")&&html.includes("{t:.48,name:'前刺命中'"),'execution thrust must accelerate sharply into impact');
 check(html.includes("guardHit:{duration:480,loop:false,twoHanded:true")&&html.includes("dodge:{duration:520,loop:false,twoHanded:true"),'must provide guarded hit and two-handed dodge reactions');
 check(html.includes("recoveryHit:{duration:600,loop:false,twoHanded:true"),'must provide one shared two-handed hit reaction for recovery windows');
 check(html.includes("name:'格挡受击'")&&html.includes("name:'后撤闪避'"),'guarded hit and dodge need explicit action poses');

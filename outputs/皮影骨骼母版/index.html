@@ -88,10 +88,11 @@ const parryPhases=[
 ];
 const executePhases=[
   {t:0,name:'处决准备·双手',...base},
-  {t:.18,name:'收剑蓄势',...base,rootX:458,rootY:418,torso:8,gripX:88,gripY:40,sword:-36,ft:64,fs:91,rt:116,rs:89},
-  {t:.40,name:'前刺起势',...base,rootX:475,rootY:410,torso:5,gripX:105,gripY:25,sword:-18,ft:63,fs:89,rt:117,rs:91},
-  {t:.60,name:'前刺命中',...base,rootX:510,rootY:414,torso:14,gripX:126,gripY:30,sword:-8,ft:56,fs:84,rt:124,rs:96},
-  {t:.78,name:'贯穿定势',...base,rootX:515,rootY:416,torso:16,gripX:126,gripY:32,sword:-7,ft:56,fs:84,rt:124,rs:96},
+  {t:.16,name:'收剑蓄势',...base,rootX:458,rootY:418,torso:8,gripX:88,gripY:40,sword:-36,ft:64,fs:91,rt:116,rs:89},
+  {t:.36,name:'前刺起势',...base,rootX:475,rootY:410,torso:5,gripX:105,gripY:25,sword:-18,ft:63,fs:89,rt:117,rs:91},
+  {t:.48,name:'前刺命中',...base,rootX:510,rootY:414,torso:14,gripX:126,gripY:30,sword:-8,ft:56,fs:84,rt:124,rs:96},
+  {t:.58,name:'贯穿定势',...base,rootX:515,rootY:416,torso:16,gripX:126,gripY:32,sword:-7,ft:56,fs:84,rt:124,rs:96},
+  {t:.80,name:'抽剑收势',...base,rootX:492,rootY:412,torso:4,gripX:112,gripY:30,sword:-28,ft:64,fs:91,rt:116,rs:89},
   {t:1,name:'处决结束',...base}
 ];
 const guardHitPhases=[
@@ -115,7 +116,7 @@ const recoveryHitPhases=[
   {t:.76,name:'受击收势',...base,rootX:370,rootY:419,torso:-12,head:-2,gripX:82,gripY:42,ft:73,fs:96,rt:107,rs:83,sword:-65},
   {t:1,name:'回到防御·双手',...base}
 ];
-const ACTIONS=Object.freeze({idle:{duration:1400,loop:true,twoHanded:true,phases:idlePhases},slash:{duration:620,loop:false,twoHanded:false,phases:normalPhases},breakAttack:{duration:900,loop:false,twoHanded:false,phases:breakPhases},parry:{duration:550,loop:false,twoHanded:true,phases:parryPhases},execute:{duration:1050,loop:false,twoHanded:true,phases:executePhases},guardHit:{duration:480,loop:false,twoHanded:true,phases:guardHitPhases},dodge:{duration:520,loop:false,twoHanded:true,phases:dodgePhases},recoveryHit:{duration:600,loop:false,twoHanded:true,phases:recoveryHitPhases}});
+const ACTIONS=Object.freeze({idle:{duration:1400,loop:true,twoHanded:true,phases:idlePhases},slash:{duration:620,loop:false,twoHanded:false,phases:normalPhases},breakAttack:{duration:900,loop:false,twoHanded:false,phases:breakPhases},parry:{duration:550,loop:false,twoHanded:true,phases:parryPhases},execute:{duration:720,loop:false,twoHanded:true,phases:executePhases},guardHit:{duration:480,loop:false,twoHanded:true,phases:guardHitPhases},dodge:{duration:520,loop:false,twoHanded:true,phases:dodgePhases},recoveryHit:{duration:600,loop:false,twoHanded:true,phases:recoveryHitPhases}});
 const mix=(a,b,t)=>a+(b-a)*t,ease=t=>t*t*(3-2*t);
 function poseAt(t){const phases=ACTIONS[currentAction].phases;if(t<=0)return phases[0];if(t>=1)return phases.at(-1);const i=phases.findIndex((p,n)=>n<phases.length-1&&t>=p.t&&t<=phases[n+1].t),a=phases[i],b=phases[i+1],u=ease((t-a.t)/(b.t-a.t)),o={name:b.name};for(const k of Object.keys(a))if(typeof a[k]==='number')o[k]=mix(a[k],b[k],u);return o}
 const line=(id,a,b)=>{const el=document.getElementById(id);el.setAttribute('x1',a.x);el.setAttribute('y1',a.y);el.setAttribute('x2',b.x);el.setAttribute('y2',b.y)};
